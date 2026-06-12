@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🎂 哥哥生日快乐！</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 蛋糕区域 -->
+<div id="cakeSection" class="cake-section">
+    <div class="container">
+        <img id="cake" src="images/cake-no-candle.png" alt="生日蛋糕" class="cake-img">
+        <div id="candle" class="candle hidden">
+            <div class="flame"></div>
+            <div class="candle-body"></div>
+        </div>
+        <p id="message" class="message hidden">🎉 小傲宝宝生日快乐呀！ 🎉</p>
+    </div>
+</div>
+
+<!-- 五子棋区域 -->
+<div id="gobangSection" class="gobang-section hidden">
+    <div class="gobang-container">
+        <div class="players-bar">
+            <div class="player">
+                <img src="images/me.png" class="avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="avatar-fallback" style="display:none;">😊</div>
+                <span class="player-name">我</span>
+            </div>
+            <div class="vs-text">VS</div>
+            <div class="player">
+                <img src="images/him.png" class="avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="avatar-fallback" style="display:none;">🎂</div>
+                <span class="player-name">你</span>
+            </div>
+        </div>
+        <canvas id="gobangCanvas" width="550" height="550"></canvas>
+        <div class="score-board"><span>🏆 我赢 <span id="myScore">0</span> 局</span><span>🏆 你赢 <span id="hisScore">0</span> 局</span></div>
+        <div class="game-buttons"><button id="resetGameBtn">🔄 新的一局</button><button id="resetScoreBtn">🔁 重置比分</button></div>
+    </div>
+</div>
+
+<!-- 赢棋弹窗 -->
+<div id="winModal" class="win-modal hidden"><div class="win-modal-content"><p class="win-text">🎉 恭喜宝宝赢了我！其实我偷偷学了三天五子棋才勉强下赢电脑...为了让你赢，我真的很努力！ </p><div class="win-buttons"><button id="continueBtn" class="win-btn continue-btn">▶ 再来一局！</button><button id="rewardBtn" class="win-btn reward-btn">让我们领取奖励吧</button></div></div></div>
+
+<!-- 奖励弹窗 -->
+<div id="rewardMessageModal" class="win-modal hidden"><div class="win-modal-content reward-content"><p class="reward-text">✨我们要下一辈子五子棋！！</p><button id="closeRewardBtn" class="win-btn">好呀好呀</button></div></div>
+
+<!-- 密码锁弹窗 -->
+<div id="passwordModal" class="win-modal hidden"><div class="win-modal-content password-content"><p class="password-title">🔐 请输入密码喔 🔐</p><div class="simple-password"><div class="digit-selector"><button class="digit-up" data-digit="0">▲</button><span class="digit-value" id="digit1">0</span><button class="digit-down" data-digit="0">▼</button></div><div class="digit-selector"><button class="digit-up" data-digit="1">▲</button><span class="digit-value" id="digit2">0</span><button class="digit-down" data-digit="1">▼</button></div><div class="digit-selector"><button class="digit-up" data-digit="2">▲</button><span class="digit-value" id="digit3">0</span><button class="digit-down" data-digit="2">▼</button></div></div><div class="hint-area"><button id="hintBtn" class="hint-btn">💡 小提示</button><div id="hintText" class="hint-text hidden">提示：还记得你给我的第几个赞嘛</div></div><button id="unlockBtn" class="unlock-btn">🔓 解锁</button><p id="passwordError" class="password-error hidden">❌ 猜错啦</p></div></div>
+
+<!-- 盲盒弹窗 -->
+<div id="blindboxModal" class="win-modal hidden"><div class="win-modal-content blindbox-content"><p class="blindbox-title">🎁 解锁成功！宝宝好棒！我们来开盲盒吧</p><div class="blindbox-container"><div class="blindbox" id="blindbox1"><img src="images/m1.png" class="blindbox-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Crect width=%22120%22 height=%22120%22 fill=%22%23ffd700%22/%3E%3Ctext x=%2260%22 y=%2260%22 text-anchor=%22middle%22 font-size=%2240%22%3E🎁%3C/text%3E%3C/svg%3E'"><div class="character-hidden hidden" id="character1"><img src="images/k1.png" class="character-img"><p class="character-text">🐻哇塞是海豹船长呀！听桥好痛呜呜呜呜</p></div></div><div class="blindbox" id="blindbox2"><img src="images/m2.png" class="blindbox-img"><div class="character-hidden hidden" id="character2"><img src="images/k2.png" class="character-img"><p class="character-text">完美咔咔鸟来也！！！宝宝咔咔鸟玩的特别好呢</p></div></div><div class="blindbox" id="blindbox3"><img src="images/m3.png" class="blindbox-img"><div class="character-hidden hidden" id="character3"><img src="images/k3.png" class="character-img"><p class="character-text">竟然没给聪明小龙拍照 <br>嘿嘿还好上次共享屏幕哄着你点开了一下小龙截图成功！<br>我们补拍一张好不好嘛</p></div></div></div><button id="closeBlindboxBtn" class="win-btn close-blindbox-btn">关闭</button></div></div>
+
+<!-- 精灵蛋弹窗 -->
+<div id="eggModal" class="win-modal hidden"><div class="win-modal-content egg-content"><p class="egg-title">🎉 恭喜幸运小宝宝！ 🎉</p><p class="egg-text">恭喜您成为本网页第一位用户！<br>特别赠送您一个了不起天分完美性格的精灵蛋</p><img src="images/nyj.png" class="egg-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Ccircle cx=%2260%22 cy=%2260%22 r=%2250%22 fill=%22%23aaffdd%22/%3E%3Ctext x=%2260%22 y=%2270%22 text-anchor=%22middle%22 font-size=%2230%22%3E🥚%3C/text%3E%3C/svg%3E'"><div class="accept-buttons"><button class="accept-btn" data-accept="1">接受</button><button class="accept-btn" data-accept="2">开心接受</button><button class="accept-btn" data-accept="3">特别开心接受</button><button class="accept-btn" data-accept="4">非常特别开心接受</button></div></div></div>
+
+<!-- 孵蛋中弹窗 -->
+<div id="hatchingModal" class="win-modal hidden"><div class="win-modal-content hatching-content"><p class="hatching-text">🥚 孵蛋ing... 🥚</p><div class="hatching-animation">✨ 💫 ✨</div></div></div>
+
+<!-- 选择契约球弹窗 -->
+<div id="ballModal" class="win-modal hidden"><div class="win-modal-content ball-content"><p class="ball-title">🔮 请选择使用什么球建立契约 🔮</p><div class="ball-buttons"><button class="ball-btn" data-ball="prism">🔮 棱镜球</button><button class="ball-btn" data-ball="king">👑 国王球</button><button class="ball-btn" data-ball="magic">✨ 美妙球</button></div></div></div>
+
+    <!-- 契约成功弹窗 -->
+    <div id="contractModal" class="win-modal hidden">
+        <div class="win-modal-content contract-content">
+            <p class="contract-title">🎉 契约成立啦！ 🎉</p>
+            <img id="contractImg" src="" class="contract-img">
+            <button id="closeContractBtn" class="win-btn">✨ 宝宝你有小猫咯！</button>
+        </div>
+    </div>
+
+    <!-- 最终结局全屏页面 -->
+    <div id="finalScreen" class="final-screen hidden">
+        <div class="final-container">
+            <p class="final-text">✨ 故事的最后 ✨<br>Leo和聂聂在卡罗西亚大陆<br>幸福的生活在了一起 💕</p>
+            <img src="images/ln.png" class="final-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23ffd700%22/%3E%3Ctext x=%22100%22 y=%22110%22 text-anchor=%22middle%22 font-size=%2230%22%3E💕%3C/text%3E%3C/svg%3E'">
+            <button id="closeFinalBtn" class="final-btn">✨ 那好幸福呀 ✨</button>
+        </div>
+    </div>
+
+    <!-- 小猫送信弹窗 -->
+    <div id="catLetterModal" class="win-modal hidden">
+        <div class="win-modal-content cat-letter-content">
+            <div class="cat-emoji">🐱💌</div>
+            <p class="cat-letter-text">小猫给你送来了一封信哦 ✨</p>
+            <button id="openLetterBtn" class="win-btn cat-btn">📬 点击收信</button>
+        </div>
+    </div>
+
+    <!-- 信件页面（全屏） -->
+<div id="letterScreen" class="letter-screen hidden">
+    <div class="letter-container">
+        <div class="letter-paper">
+            <!-- 星星容器（浮动在文本上层） -->
+            <div id="starContainer" class="star-container"></div>
+            
+            <div class="letter-header">
+                <span class="letter-icon">💌</span>
+                <span class="letter-title">给李傲宝宝</span>
+                <span class="letter-icon">💌</span>
+            </div>
+            <div class="letter-content-scroll">
+                <div class="letter-body" id="letterBody">
+              宝宝这是之前写的手写信，有时候感觉世事无常所以我想借这个机会不让这些词句变成遗憾 生日信在邮箱哦嘿嘿 爱你宝宝！  
+ T0李傲
+想你想你好想你变成挂件变成粘人精变成幼稚鬼原来思念真的会掉眼泪何当共剪西窗烛.却话巴山夜雨时.为什么这么远又那么近，你的声音在身边，人影却在隔着7个小时时差的另一边.仍旧是得神奇和不可置信.半年前和我说会遇到你我嗤之以鼻，那句话怎么说来着，智者不入爱河哈哈哈反而呢给了我一些震惊和新的体验（思考）我写字怎么这么好看天呐.自恋一下.其实回头数过一起走的几天.反而惊觉时间之长.竟然有119天了呢.幸福的时候完全意识不到时间流逝那句诗咋说的来着，喔喔“到乡翻似烂柯人”人真是奇之又怪的.和你挂断电话下一秒就觉得过去了10个小时但其实也才20分钟.到了计算和你相识的时间反而觉得少之又少恨不得再加上几百年 咪咪你也爱我吧
+   我好想你.你到我梦里来
+2026/5/8
+0:37  
+T0李傲
+很久很久以前我爱你一遍一遍.好难过好想哭.我现在才懂了那句话“你出现的时候天空都亮起来”你我更甚，消息提示音响起来那刻心情都雀跃几分 可是可是、讨厌的时差和你有些糟糕的身体状态连这份开心也要剥去几分，今早你说慢慢变成中国作息 我嘴上没说什么 甚至想你这样颠倒很影响你的正常社交而心疼.但我的开心甚至冲过了困倦.你终于又可以陪我很久很久，再接到你的声音，是你说做超声手术要和英国作息同步，我的心又一沉，我清楚的知道这是应该的，也是暂时的可我的心已经不能理智的劝自己懂事.我好想要耍赖要你一直一直陪着我.这样矛盾而甜蜜的思绪果真是恋爱中爱的魔法，时间倒档回过去，我无法想象这样为一个人茶饭不思担心忧虑会发生在我身上，其实不能和你聊天的时候我总翻阅着之前的聊天记录，发现好像是我先剖开我的世界分享给你，我竟出于嫉妒地想你像我一样爱我，你会在我睡着的时候痴痴地看我们的对话吗，我傻傻的觉得没有，你忙着毕业学习.你只有了了几句想我的词藻.我也没让你超过8.9个小时收不到我的消息.行文到此又想流泪.宝宝，你知不知道在我这样爱你的同时，我的恐惧也一样无穷无际我好怕当作梦一场，我好怕等不到见面就分开我的恐惧在你沉睡的时候吞噬着我，我只想多写一点，再多写一点，把我的害怕我的爱都写下来.运气好的话.信笺带着我湿漉漉的吻停留在你手也让你看到止于言语的爱、运气不好的话，我甚至恐惧没有把信送到你手边的机会.我想它带着潮湿的思念和在心底落下的泪水飘荡着飞到你的窗前，如果你能为拥有一刻这样的幸福而落泪的话.它飘落多久也不会觉得苦闷哀愁.我不知道怎么纾解这样的悲观恋爱情节…好神奇.我在为素为未谋面的电子蝴蝶哭泣.谢谢我的眼泪吧，当你读到这里，不论我们此刻是否分别又是否手牵着手，请你记得有一双为你流过泪的眼睛.我这样的沉沦在恐惧和爱的小河，你会来救我么，然后我们拥抱，头抵着头，鼻蹭着鼻，作彼此缠绕的两株藤蔓，爱这个字好生沉重 我踟躇地下笔.可是.我爱你啊.李傲.流下的眼泪会变成落在你肩头的雨吗，我想不会的，因为我才看的科普这样的水分流转需得许久许久.可我想又会的.我写完这些更爱你几分.我想我们可以面对面抱着，你听我讲没有营养的话，时不时接吻然后我幸福地流下眼泪，悄咪咪蹭到你的肩膀上，你问我怎么了，我只说“些许风沙迷了眼（装帅）”
+2026/5/11
+22:11
+宝宝从这封信时间之后我们的每一天都变得更幸福 让人头脑发昏 我想说我深深的喜欢着你 所以宝宝一直幸福下去吧我会永远是听到你幸福为你流泪的那个人
+                </div>
+            </div>
+            <button id="closeLetterBtn" class="letter-close-btn">✨ 收到信啦 ✨</button>
+        </div>
+    </div>
+</div>
+<!-- 星星收集成功惊喜弹窗 -->
+<div id="starSurpriseModal" class="win-modal hidden">
+    <div class="win-modal-content surprise-content">
+        <img src="images/dianji.png" class="surprise-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect width=%22150%22 height=%22150%22 fill=%22%23ffd700%22/%3E%3Ctext x=%2275%22 y=%2285%22 text-anchor=%22middle%22 font-size=%2230%22%3E🎉%3C/text%3E%3C/svg%3E'">
+        <p class="surprise-text">🎉 电击小子祝李傲生日快乐呀！ 🎉</p>
+        <button id="closeSurpriseBtn" class="win-btn surprise-btn">❤️ 好幼稚呀好喜欢那就收下吧 ❤️</button>
+    </div>
+</div>
+    <script src="script.js"></script>
+</body>
+</html>
